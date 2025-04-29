@@ -1,10 +1,10 @@
 FROM debian:bookworm-slim
 
-ARG RUNNER_VERSION="2.302.1"
+ARG RUNNER_VERSION="2.323.0"
 
-ENV GITHUB_PERSONAL_TOKEN ""
-ENV GITHUB_OWNER ""
-ENV GITHUB_REPOSITORY ""
+ENV GITHUB_PERSONAL_TOKEN=""
+ENV GITHUB_OWNER=""
+ENV GITHUB_REPOSITORY=""
 
 # Install Docker -> https://docs.docker.com/engine/install/debian/
 
@@ -34,7 +34,7 @@ RUN useradd -m github && \
 
 USER github
 WORKDIR /actions-runner
-RUN curl -Ls https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz | tar xz \
+RUN curl -Ls https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-osx-x64-${RUNNER_VERSION}.tar.gz | tar xz \
   && sudo ./bin/installdependencies.sh
 
 COPY --chown=github:github entrypoint.sh  /actions-runner/entrypoint.sh
