@@ -2,9 +2,9 @@ FROM debian:bookworm-slim
 
 ARG RUNNER_VERSION="2.323.0"
 
-ENV GITHUB_PERSONAL_TOKEN="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"
-ENV GITHUB_OWNER="spandan1460"
-ENV GITHUB_REPOSITORY="self-hosted-runner-BITS-Assignment"
+ENV GITHUB_PERSONAL_TOKEN=""
+ENV GITHUB_OWNER=""
+ENV GITHUB_REPOSITORY=""
 
 # Install Docker -> https://docs.docker.com/engine/install/debian/
 
