@@ -17,7 +17,7 @@ spec:
       containers:
       - name: github-runner
         imagePullPolicy: Never #use local kind image
-        image: github-runner:latest
+        image: bits-github-runner:v1.0
         resources: 
             limits:
               cpu: 100m
