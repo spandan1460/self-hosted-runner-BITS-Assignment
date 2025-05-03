@@ -41,6 +41,6 @@ COPY --chown=github:github entrypoint.sh  /actions-runner/entrypoint.sh
 RUN sudo chmod u+x /actions-runner/entrypoint.sh
 
 #working folder for the runner 
-RUN sudo mkdir /work
+RUN sudo mkdir /work && sudo chown github:github /work
 
 ENTRYPOINT ["/actions-runner/entrypoint.sh"]
