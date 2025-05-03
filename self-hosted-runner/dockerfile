@@ -2,7 +2,7 @@ FROM debian:bookworm-slim
 
 ARG RUNNER_VERSION="2.323.0"
 
-ENV GITHUB_PERSONAL_TOKEN="APJBLGREN4ZUG6BZUFMIVWTICNCDK"
+ENV GITHUB_PERSONAL_TOKEN="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"
 ENV GITHUB_OWNER="spandan1460"
 ENV GITHUB_REPOSITORY="self-hosted-runner-BITS-Assignment"
 
@@ -34,13 +34,13 @@ RUN useradd -m github && \
 
 USER github
 WORKDIR /actions-runner
-RUN curl -Ls https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-osx-arm64-${RUNNER_VERSION}.tar.gz | tar xz \
+RUN curl -Ls https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz | tar xz \
   && sudo ./bin/installdependencies.sh
 
 COPY --chown=github:github entrypoint.sh  /actions-runner/entrypoint.sh
 RUN sudo chmod u+x /actions-runner/entrypoint.sh
 
 #working folder for the runner 
-RUN sudo mkdir /work 
+RUN sudo mkdir /work
 
 ENTRYPOINT ["/actions-runner/entrypoint.sh"]
