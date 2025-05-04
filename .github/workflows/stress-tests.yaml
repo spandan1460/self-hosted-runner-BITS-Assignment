@@ -41,7 +41,7 @@ jobs:
           elif [[ "${{ github.event.inputs.intensity }}" == "medium" ]]; then
             percent=70
           else
-            percent=85
+            percent=100
           fi
           
           # Run memory stress test (percentage of available memory)
@@ -102,6 +102,9 @@ jobs:
         job-id: [1, 2, 3, 4, 5, 6, 7, 8]
         # Adjust number of parallel jobs based on intensity
     steps:
+      - uses: actions/setup-python@v5
+        with:
+            python-version: '3.13'
       - name: Run Parallel Process
         run: |
           # Adjust workload based on intensity
