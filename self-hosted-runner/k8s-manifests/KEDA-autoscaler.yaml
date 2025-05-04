@@ -1,0 +1,16 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: github-runner-scaler
+spec:
+  scaleTargetRef:
+    name: github-runner
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+  - type: github-runner
+    metadata:
+      owner: spandan1460
+      repo: self-hosted-runner-BITS-Assignment
+      runnerType: "repo"
+      PAT: "GITHUB_PAT" 
