@@ -1,0 +1,29 @@
+name: Self-Hosted Runner Test
+
+on: 
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: print env
+      run: |
+        printenv
+        echo "GITHUB_RUNNER_NAME=${{ github.event_name }}" >> $GITHUB_ENV
+        echo "GITHUB_RUNNER_ARCH=${{ runner.arch }}" >> $GITHUB_ENV
+        echo "GITHUB_RUNNER_OS=${{ runner.os }}" >> $GITHUB_ENV
+
+    - name: print env
+      run: echo "Hello World"
+
+    - name: docker build python
+      run: |
+        docker build ./python/introduction/ -t python:1.0.0

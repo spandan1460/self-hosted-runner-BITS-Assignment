@@ -5,7 +5,7 @@ metadata:
   labels:
     app: github-runner
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: github-runner
@@ -16,8 +16,15 @@ spec:
     spec:
       containers:
       - name: github-runner
-        imagePullPolicy: Never #use local kind image
-        image: github-runner:latest
+        imagePullPolicy: Always #When using local docker image change it to Never
+        image: public.ecr.aws/c7h2a5r9/github-runner:latest
+        resources: 
+            limits:
+              cpu: 100m
+              memory: 2Gi
+            requests: 
+                cpu: 20m 
+                memory: 512Mi 
         env:
         - name: GITHUB_OWNER
           valueFrom:
@@ -45,6 +52,9 @@ spec:
         - name: DOCKER_TLS_CERTDIR
           value: ""
         resources: 
+            limits:
+              cpu: 100m
+              memory: 2Gi
             requests: 
                 cpu: 20m 
                 memory: 512Mi 

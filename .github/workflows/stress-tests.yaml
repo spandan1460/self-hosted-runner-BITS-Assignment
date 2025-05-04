@@ -1,0 +1,122 @@
+name: Self-Hosted Runner Stress Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      intensity:
+        description: 'Test intensity (low/medium/high)'
+        required: true
+        default: 'medium'
+
+jobs:
+  cpu-intensive:
+    runs-on: self-hosted
+    steps:
+      - name: CPU Stress Test
+        run: |
+          sudo apt-get update && sudo apt-get install -y stress-ng
+          
+          # Select test duration based on intensity
+          if [[ "${{ github.event.inputs.intensity }}" == "low" ]]; then
+            duration=30
+          elif [[ "${{ github.event.inputs.intensity }}" == "medium" ]]; then
+            duration=120
+          else
+            duration=300
+          fi
+          
+          # Run CPU stress test
+          stress-ng --cpu 2 --timeout ${duration}s --metrics
+          
+  memory-intensive:
+    runs-on: self-hosted
+    steps:
+      - name: Memory Stress Test
+        run: |
+          sudo apt-get update && sudo apt-get install -y stress-ng
+          
+          # Select memory percentage based on intensity
+          if [[ "${{ github.event.inputs.intensity }}" == "low" ]]; then
+            percent=50
+          elif [[ "${{ github.event.inputs.intensity }}" == "medium" ]]; then
+            percent=70
+          else
+            percent=85
+          fi
+          
+          # Run memory stress test (percentage of available memory)
+          free -m
+          stress-ng --vm 2 --vm-bytes $(free -m | grep Mem | awk '{print int($2*'$percent'/100)"M"}') --timeout 60s --metrics
+          free -m
+          
+  disk-intensive:
+    runs-on: self-hosted
+    steps:
+      - name: Disk I/O Test
+        run: |
+          sudo apt-get update && sudo apt-get install -y fio
+          
+          # Run disk I/O test
+          cd /work
+          fio --name=random-write --ioengine=posixaio --rw=randwrite --bs=4k --size=250m --numjobs=4 --iodepth=32 --runtime=60 --time_based --end_fsync=1
+          
+  docker-build-stress:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Create Test Dockerfile
+        run: |
+          cat > Dockerfile.test << EOF
+          FROM ubuntu:latest
+          RUN apt-get update && apt-get install -y curl wget git build-essential
+          RUN for i in {1..10}; do echo "Layer \$i" > /tmp/layer\$i; done
+          WORKDIR /app
+          RUN mkdir -p data && dd if=/dev/urandom of=data/random.bin bs=1M count=100
+          EOF
+      
+      - name: Build Docker Image Multiple Times
+        run: |
+          # Select iterations based on intensity
+          if [[ "${{ github.event.inputs.intensity }}" == "low" ]]; then
+            iterations=3
+          elif [[ "${{ github.event.inputs.intensity }}" == "medium" ]]; then
+            iterations=5
+          else
+            iterations=10
+          fi
+          
+          # Build image multiple times
+          for i in $(seq 1 $iterations); do
+            echo "Building image iteration $i"
+            docker build -f Dockerfile.test -t stresstest:$i .
+          done
+          
+          # Clean up
+          docker image prune -f
+          
+  parallel-jobs:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        job-id: [1, 2, 3, 4, 5, 6, 7, 8]
+        # Adjust number of parallel jobs based on intensity
+    steps:
+      - name: Run Parallel Process
+        run: |
+          # Adjust workload based on intensity
+          if [[ "${{ github.event.inputs.intensity }}" == "low" ]]; then
+            max=30000000
+          elif [[ "${{ github.event.inputs.intensity }}" == "medium" ]]; then
+            max=60000000
+          else
+            max=100000000
+          fi
+          
+          # CPU-intensive calculation
+          python3 -c "total = 0
+          for i in range(${max}):
+              if i % 10000000 == 0:
+                  print(f'Progress: {i/${max}*100:.1f}%')
+              total += i
+          print(f'Total: {total}')"

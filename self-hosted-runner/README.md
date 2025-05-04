@@ -1,6 +1,4 @@
-<a href="https://youtu.be/RcHGqCBofvw" title="githubactions"><img src="https://i.ytimg.com/vi/RcHGqCBofvw/hqdefault.jpg" width="20%" alt="introduction to github actions runners" /></a> 
-
-# Introduction to GitHub Actions: Self hosted runners
+# GitHub Actions: Self hosted runners
 
 ## Create a kubernetes cluster
 
@@ -60,7 +58,7 @@ Next steps:
 Finally lets test the runner in `docker` 
 
 ```
-docker run -it -e GITHUB_PERSONAL_TOKEN="" -e GITHUB_OWNER=marcel-dempers -e GITHUB_REPOSITORY=docker-development-youtube-series github-runner
+docker run -it -e GITHUB_PERSONAL_TOKEN="" -e GITHUB_OWNER=spandan1460 -e GITHUB_REPOSITORY=self-hosted-runner-BITS-Assignment github-runner
 ```
 
 ## Deploy to Kubernetes 
