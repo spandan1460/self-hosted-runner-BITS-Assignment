@@ -3,7 +3,10 @@ name: Self-Hosted Runner Test
 on: 
   push:
     branches:
-    - ARM-Runner
+    - main
+  pull_request:
+    branches:
+    - main
 
 jobs:
   build:

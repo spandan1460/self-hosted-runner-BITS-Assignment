@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: github-runner
-        imagePullPolicy: Never #use local kind image
-        image: bits-github-runner:v1.0
+        imagePullPolicy: Always #When using local docker image change it to Never
+        image: public.ecr.aws/c7h2a5r9/github-runner:latest
         resources: 
             limits:
               cpu: 100m
