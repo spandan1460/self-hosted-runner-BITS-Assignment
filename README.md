@@ -1,15 +1,24 @@
 # GitHub Actions: Self hosted runners
 
-## Create a kubernetes cluster
+## Create a kubernetes cluster in local
 
-In this guide we we'll need a Kubernetes cluster for testing. Let's create one using [kind](https://kind.sigs.k8s.io/) </br>
+In this Project we'll need a Kubernetes cluster for testing in local machine. Let's create one using [minikube](https://minikube.sigs.k8s.io/) </br>
 
 ```
-kind create cluster --name githubactions --image kindest/node:v1.28.0@sha256:b7a4cad12c197af3ba43202d3efe03246b3f0793f162afb40a33c923952d5b31
+minikube start --profile githubactions --kubernetes-version=v1.32.0 --driver=docker --memory=4g --cpus=2
 ```
 
 Let's test our cluster:
 ```
+minikube status -p githubactions
+
+githubactions
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
 kubectl get nodes
 NAME                          STATUS   ROLES           AGE     VERSION
 githubactions-control-plane   Ready    control-plane   2m53s   v1.28.0
@@ -22,8 +31,8 @@ We can simply install this directly on to virtual machines , but for this demo, 
 ### Security notes
 
 * Running in Docker needs high priviledges.
-* Would not recommend to use these on public repositories.
-* Would recommend to always run your CI systems in seperate Kubernetes clusters.
+* Would not recommend to use these on public repositories. but, we have kept our repository public for the sake of assignment.
+* Would recommend to always run your CI systems in seperate Kubernetes clusters and not in the cluster where the runners are working.
 
 ### Creating a Dockerfile
 
@@ -32,7 +41,7 @@ For this to work we need a `dockerfile` and follow instructions to [Install Dock
 I would grab the content and create statements for my `dockerfile` </br>
 
 Now notice that we only install the `docker` CLI. </br> 
-This is because we want our running to be able to run docker commands , but the actual docker server runs elsewhere </br>
+This is because we want our running pipelines to be able to run docker commands , but the actual docker server runs elsewhere </br>
 This gives you flexibility to tighten security by running docker on the host itself and potentially run the container runtime in a non-root environment </br>
 
 * Installing Github Actions Runner 
