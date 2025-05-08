@@ -97,3 +97,15 @@ kubectl -n github create secret generic github-secret `
 
 kubectl -n github apply -f kubernetes.yaml
 ```
+
+
+## Create a EKS Cluster for our runners
+
+Now, we will use the eksctl CLI utility to create our clusters.
+
+- All the configurations of the clusters can be found in a YAML format in [self-hosted-runner/eksctl.yaml](https://github.com/spandan1460/self-hosted-runner-BITS-Assignment/blob/main/self-hosted-runner/eksctl.yaml)
+
+
+```
+eksctl create cluster -f self-hosted-runner/eksctl.yaml
+```

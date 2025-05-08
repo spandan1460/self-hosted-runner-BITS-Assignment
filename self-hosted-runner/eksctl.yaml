@@ -2,12 +2,14 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: bits-test-app-us-02
+  name: bits-test-app-us-01
   region: us-east-1
   version: "1.32"
 availabilityZones:
 - us-east-1a
 - us-east-1b
+
+# AWS automatically handles provisioning, scaling, and lifecycle management of the nodes.
 managedNodeGroups:
 - name: linux-managed-nodes
   labels:
@@ -15,14 +17,16 @@ managedNodeGroups:
   instanceType: t3a.medium
   minSize: 1
   maxSize: 10
+  spot: true
   desiredCapacity: 1
   volumeSize: 20
+
+# We are responsible for provisioning, scaling, and lifecycle management of the nodes
 nodeGroups:
 - name: linux-unmanaged-nodes
   labels:
     role: unmanaged-nodes
   instanceType: t3a.medium
-  spot: true
   minSize: 1
   maxSize: 10
   desiredCapacity: 1
