@@ -9,7 +9,7 @@ on:
     - main
 
 jobs:
-  build:
+  build1:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v4
@@ -22,7 +22,29 @@ jobs:
         echo "GITHUB_RUNNER_OS=${{ runner.os }}" >> $GITHUB_ENV
 
     - name: print env
-      run: echo "Hello World"
+      run: |
+        echo "Hello World"
+
+    - name: docker build python
+      run: |
+        docker build ./python/introduction/ -t python:1.0.0
+
+  build2:
+    runs-on: self-hosted
+    needs: build1
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: print env
+      run: |
+        printenv
+        echo "GITHUB_RUNNER_NAME=${{ github.event_name }}" >> $GITHUB_ENV
+        echo "GITHUB_RUNNER_ARCH=${{ runner.arch }}" >> $GITHUB_ENV
+        echo "GITHUB_RUNNER_OS=${{ runner.os }}" >> $GITHUB_ENV
+
+    - name: print env
+      run: |
+        echo "Hello World"
 
     - name: docker build python
       run: |
