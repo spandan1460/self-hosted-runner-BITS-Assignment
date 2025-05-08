@@ -6,6 +6,7 @@
 * [Amazon AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 * [Kubernetes CLI (Kubectl)](https://kubernetes.io/docs/tasks/tools/)
 * [eksctl CLI utility](https://eksctl.io/installation/)
+* [Minikube (for creating local kubernetes cluster for testing)](https://minikube.sigs.k8s.io/)
 
 ## Create a kubernetes cluster in local
 
