@@ -109,3 +109,13 @@ Now, we will use the eksctl CLI utility to create our clusters.
 ```
 eksctl create cluster -f self-hosted-runner/eksctl.yaml
 ```
+
+## Create AWS ECR Container Registry for Storing Docker images
+
+We are not ready yet, our EKS Cluster cannot store Docker images inside the cluster. So, we need an Container Registry for it. Hence, for our project we would be using AWS ECR(Elastic Container Registry) services to store our docker images, for our EKS clusters to pull the docker images and create containers out of it.
+
+Here, is the AWS CLI command to create one ECR(Elastic Container Registry) Service inside our AWS VPC.
+
+```
+aws ecr create-repository --repository-name github-runner
+```
