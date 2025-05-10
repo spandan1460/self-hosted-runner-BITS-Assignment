@@ -89,7 +89,7 @@ Now, that our runner works successfully in the container, we would proceed by bu
 Load our github runner image so we dont need to push it to a registry:
 
 ```
-minikube image load github-runner:latest -p githubactions
+minikube image load bits-github-runner:latest -p githubactions
 ```
 
 Create a new namespace for our github runners
