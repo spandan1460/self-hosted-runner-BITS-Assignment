@@ -2,6 +2,8 @@
 
 ## Pre-requisites
 
+We need to install the below tools to run and test the project.
+
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 * [Amazon AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 * [Kubernetes CLI (Kubectl)](https://kubernetes.io/docs/tasks/tools/)
@@ -15,6 +17,8 @@ In this Project we'll need a Kubernetes cluster for testing in local machine. Le
 ```
 minikube start --profile githubactions --kubernetes-version=v1.32.0 --driver=docker --memory=4g --cpus=2
 ```
+
+This would create a cluster in local by provisioning 2 core CPU and 4 GB RAM single node.
 
 Let's test our cluster:
 ```
@@ -55,28 +59,30 @@ This gives you flexibility to tighten security by running docker on the host its
 * Installing Github Actions Runner 
 
 Next up we will need to install the [GitHub actions runner](https://github.com/actions/runner) in our `dockerfile`
-Now to give you a "behind the scenes" of how we usually build our `dockerfile`s, We run a container to test my installs: 
+Now to give a "behind the scenes" of how we usually build our `dockerfile`s, We first build our docker image: 
 
 ```
-docker build . -t github-runner:latest 
-docker run -it github-runner bash
+docker build . -t bits-github-runner:latest 
 ```
 
 Next steps:
 
 * Now we can see `docker` is installed 
 * To see how a runner is installed, lets go to our repo | runner and click "New self-hosted runner"
-* Try these steps in the container
-* We will need few dependencies
-* We download the runner
+* Try the steps mentioned in the github docs in the docker container.
+* We will need few dependencies, we have added them in line 29
+* We download the runner in the container
 
 
 
-Finally lets test the runner in `docker` 
+Finally lets test the runner in `docker` container 
 
 ```
-docker run -it -e GITHUB_PERSONAL_TOKEN="" -e GITHUB_OWNER=spandan1460 -e GITHUB_REPOSITORY=self-hosted-runner-BITS-Assignment github-runner
+docker run -it -e GITHUB_PERSONAL_TOKEN="" -e GITHUB_OWNER=spandan1460 -e GITHUB_REPOSITORY=self-hosted-runner-BITS-Assignment bits-github-runner
 ```
+
+
+Now, that our runner works successfully in the container, we would proceed by building containers inside the local kubernetes cluster.
 
 ## Deploy to local Kubernetes for testing 
 
@@ -86,16 +92,25 @@ Load our github runner image so we dont need to push it to a registry:
 minikube image load github-runner:latest -p githubactions
 ```
 
+Create a new namespace for our github runners
+```
+kubectl create ns github-runners
+```
+
+
 Create a kubernetes secret with our github details 
 
 ```
-kubectl create ns github
-kubectl -n github create secret generic github-secret `
-  --from-literal GITHUB_OWNER=marcel-dempers `
-  --from-literal GITHUB_REPOSITORY=docker-development-youtube-series `
+kubectl -n github-runners create secret generic github-secret `
+  --from-literal GITHUB_OWNER=spandan1460 `
+  --from-literal GITHUB_REPOSITORY=self-hosted-runner-BITS-Assignment `
   --from-literal GITHUB_PERSONAL_TOKEN=""
+```
 
-kubectl -n github apply -f kubernetes.yaml
+Apply the kubernetes manifest yaml files to deploy the kubernetes manifests
+```
+kubectl -n github-runners apply -f kubernetes.yaml
+kubectl -n github-runners apply -f Pod-Autoscalers.yaml
 ```
 
 

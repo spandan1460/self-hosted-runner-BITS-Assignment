@@ -34,7 +34,7 @@ RUN useradd -m github && \
 
 USER github
 WORKDIR /actions-runner
-RUN curl -Ls https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz | tar xz \
+RUN curl -Ls https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-arm64-${RUNNER_VERSION}.tar.gz | tar xz \
   && sudo ./bin/installdependencies.sh
 
 COPY --chown=github:github entrypoint.sh  /actions-runner/entrypoint.sh
