@@ -10,6 +10,11 @@ We need to install the below tools to run and test the project.
 * [eksctl CLI utility](https://eksctl.io/installation/)
 * [Minikube (for creating local kubernetes cluster for testing)](https://minikube.sigs.k8s.io/)
 
+
+Also, apart from the above tools we need:
+* Github Account
+* Github PAT Token (Personal Access Token)
+
 ## Create a kubernetes cluster in local
 
 In this Project we'll need a Kubernetes cluster for testing in local machine. Let's create one using [minikube](https://minikube.sigs.k8s.io/) </br>
