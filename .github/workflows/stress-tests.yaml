@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Memory Stress Test
         run: |
-          sudo apt-get update && sudo apt-get install -y stress-ng
+          sudo apt-get update && sudo apt-get install -y stress-ng && sudo apt-get install -y procps 
           
           # Select memory percentage based on intensity
           if [[ "${{ github.event.inputs.intensity }}" == "low" ]]; then
